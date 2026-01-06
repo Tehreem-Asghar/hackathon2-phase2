@@ -1,55 +1,137 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+Version change: (initial) → 1.0.0
+Modified principles: (initial constitution creation)
+Added sections:
+  - Core Principles (7 principles)
+  - Technology Matrix
+  - Phase-Governed Development
+  - Project Standards
+  - Governance
+Removed sections: (none)
+Templates requiring updates:
+  - plan-template.md: ✅ No changes needed (aligns with phase-governed approach)
+  - spec-template.md: ✅ No changes needed (technology-agnostic spec format)
+  - tasks-template.md: ✅ No changes needed (task categorization supports phase isolation)
+Follow-up TODOs: (none)
+-->
+
+# Full-Stack Todo App Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Phase-Governed Development
+The project follows a strict phased development model where technology choices are bounded by the current phase. Phase I focuses on backend API only. Phase II introduces web frontend, authentication, and database. Phase III and later may include AI/agents/orchestration capabilities. Technologies from later phases MUST NOT be introduced prematurely.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Technology Isolation
+Each phase has a defined, immutable technology matrix. Once a phase technology stack is established, deviations require explicit ADR approval. The technology matrix is the single source of truth for what technologies are permitted at each phase.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Incremental Validity
+Every phase deliverable must be independently functional and deliver value. Phase I produces a working REST API. Phase II produces a complete full-stack application. No phase dependencies that require incomplete work from later phases.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. API-First Design (Phase I Priority)
+Backend API must be designed and implemented before any frontend work begins in Phase II. The API should be fully documented and independently testable via tools like curl, Postman, or other HTTP clients.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Test Discipline
+Automated tests must be written before implementation (TDD for business logic) or immediately after implementation (integration tests). Each user story must be independently testable without requiring implementation of other stories.
 
-### [PRINCIPLE_6_NAME]
+### VI. Minimal Complexity
+YAGNI principle enforced. No abstractions, patterns, or infrastructure should be added for hypothetical future needs. Start simple, add complexity only when a concrete need emerges and cannot be solved simply.
 
+### VII. Observability
+All system components must emit structured logs. API endpoints must log request/response summaries with trace IDs. Errors must be captured with context and stack traces.
 
-[PRINCIPLE__DESCRIPTION]
+## Technology Matrix
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+### Phase I: Backend API Only
+- **Backend**: Python REST API (FastAPI recommended)
+- **Database**: SQLite for local development (migrations required)
+- **ORM/Data Layer**: SQLModel or equivalent
+- **Testing**: pytest with pytest-asyncio
+- **Documentation**: OpenAPI/Swagger (auto-generated from FastAPI)
+- **Architecture**: REST API with modular service layer
+- **Authentication:** Better Auth (handling User Signup/Signin)
+- **Security:** JWT Token verification (Frontend sends Token, Backend verifies via Shared Secret `BETTER_AUTH_SECRET`)
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+**Allowed**: REST API development, database schema design, business logic, API testing
+**Forbidden**: Web frontend, authentication systems, cloud databases, AI/agent frameworks
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+### Phase II: Full-Stack Web Application
+- **Backend**: Python REST API (continues from Phase I)
+- **Database**: Neon Serverless PostgreSQL (migrate from SQLite)
+- **ORM/Data Layer**: SQLModel or equivalent (continues from Phase I)
+- **Frontend**: Next.js (React, TypeScript)
+- **Authentication:** Better Auth (handling User Signup/Signin)
+- **Security:** JWT Token verification (Frontend sends Token, Backend verifies via Shared Secret `BETTER_AUTH_SECRET`)
+- **Testing**: pytest (backend), Jest/React Testing Library (frontend)
+- **Architecture**: Full-stack web application with API + UI
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Allowed**: Web frontend development, authentication, Neon PostgreSQL, full-stack integration
+**Forbidden**: AI/agent frameworks, advanced cloud infrastructure, orchestration systems
+
+### Phase III and Later: Advanced Capabilities
+- **Advanced Cloud Infrastructure**: Scalable deployment, containerization, CI/CD pipelines
+- **Agents**: Autonomous agent systems for task automation
+- **AI**: Machine learning models, natural language processing
+- **Orchestration**: Workflow engines, task scheduling systems
+
+**Note**: Phase III scope is intentionally deferred until Phase II is complete and validated.
+
+## Project Standards
+
+### Code Quality
+- Python code must pass mypy type checking
+- TypeScript code must use strict mode and pass tsc
+- All code must pass configured linters (ruff for Python, ESLint for TypeScript)
+- Maximum function complexity: Cyclomatic complexity < 10
+- Maximum file length: < 500 lines (enforced with exceptions requiring justification)
+
+### Testing Standards
+- Unit tests: Isolated, mock external dependencies, test business logic
+- Integration tests: Test API contracts and database interactions
+- Contract tests: Verify API contracts match OpenAPI spec
+- Test coverage: Minimum 80% for business logic (no minimum for infrastructure code)
+
+### Security Standards
+- All user inputs must be validated at API boundaries
+- Secrets must be stored in environment variables or .env files (never committed)
+- Authentication required for all write operations in Phase II
+- Database queries must use parameterized statements (no raw SQL concatenation)
+- Passwords must be hashed using bcrypt or Argon2
+
+### Performance Standards
+- API endpoints: < 200ms p95 latency for simple operations
+- Database queries: < 50ms p95 for indexed lookups
+- Frontend: < 3s initial page load (Lighthouse score > 90)
+- Memory: API service < 512MB, frontend bundle < 2MB
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### Amendment Procedure
+1. Proposal: Document proposed change with rationale and impact analysis
+2. Review: All core principles must be re-evaluated for conflicts
+3. ADR Creation: For technology stack changes or governance process changes
+4. Versioning: Update CONSTITUTION_VERSION following semantic versioning rules
+5. Consistency Check: Update dependent templates (plan, spec, tasks) as needed
+6. Ratification: Commit with clear message describing amendment scope
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+### Versioning Policy
+- **MAJOR**: Backward-incompatible changes (e.g., removing a principle, changing phase technology stack)
+- **MINOR**: New principle or section added, material expansion of guidance
+- **PATCH**: Clarifications, wording improvements, typo fixes, non-semantic refinements
+
+### Compliance Review
+- All feature specs must reference the constitution for phase context
+- All implementation plans must include a Constitution Check section
+- Technology decisions outside the current phase's matrix require explicit ADR
+- Violations of non-negotiable principles (e.g., "NON-NEGOTIABLE") must be escalated to governance review
+
+### Complexity Justification
+If a feature requires violating YAGNI or minimal complexity principles:
+1. Document the specific violation
+2. Explain why simpler alternatives are insufficient
+3. Describe the problem this complexity solves
+4. Create an ADR capturing the tradeoff analysis
+5. Review must approve before implementation
+
+**Version**: 1.0.0 | **Ratified**: 2026-01-04 | **Last Amended**: 2026-01-04
