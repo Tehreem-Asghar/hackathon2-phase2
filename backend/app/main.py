@@ -16,7 +16,11 @@ app = FastAPI(title=settings.PROJECT_NAME)
 # Set all CORS enabled origins
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000" , "http://127.0.0.1:8000/"  , "https://hackathon2-phase2-indol.vercel.app/"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://hackathon2-phase2-indol.vercel.app",
+    ] + settings.BACKEND_CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

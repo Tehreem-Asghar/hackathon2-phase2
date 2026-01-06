@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://hackathon2-phase2-3tna-3w3v144th-tehreem-asghars-projects.vercel.app/';
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://hackathon2-phase2-3tna-3w3v144th-tehreem-asghars-projects.vercel.app').replace(/\/$/, '');
 
 type FetchOptions = RequestInit & {
   headers?: Record<string, string>;
