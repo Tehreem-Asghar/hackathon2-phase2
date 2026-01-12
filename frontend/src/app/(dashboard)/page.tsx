@@ -7,6 +7,7 @@ import { Todo, TodoItem } from '@/components/todo/TodoItem';
 import { AddTodoForm } from '@/components/forms/AddTodoForm';
 import { EditTodoForm } from '@/components/forms/EditTodoForm';
 import { ConfirmDeleteModal } from '@/components/modals/ConfirmDeleteModal';
+import { ChatInterface } from '@/components/chat/ChatInterface';
 
 export default function DashboardPage() {
   const { user, loading, logout } = useAuth();
@@ -16,6 +17,7 @@ export default function DashboardPage() {
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [todoToDelete, setTodoToDelete] = useState<string | null>(null);
+  const [showChat, setShowChat] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -212,12 +214,142 @@ export default function DashboardPage() {
           />
       )}
 
-      {showDeleteModal && (
-        <ConfirmDeleteModal
-          onConfirm={handleConfirmDelete}
-          onCancel={() => setShowDeleteModal(false)}
-        />
-      )}
-    </div>
-  );
-}
+                  {showDeleteModal && (
+
+                    <ConfirmDeleteModal
+
+                      onConfirm={handleConfirmDelete}
+
+                      onCancel={() => setShowDeleteModal(false)}
+
+                    />
+
+                  )}
+
+            
+
+                              {/* Floating Chatbot Button */}
+
+            
+
+                              {!showChat && (
+
+            
+
+                                <button 
+
+            
+
+                                  onClick={() => setShowChat(true)}
+
+            
+
+                                  className="fixed bottom-6 right-6 h-16 w-16 bg-white rounded-full shadow-[0_0_20px_rgba(139,92,246,0.6)] border-2 border-violet-200 flex items-center justify-center transition-all hover:scale-110 active:scale-95 z-50 overflow-hidden cursor-pointer animate-fade-in hover:shadow-[0_0_30px_rgba(139,92,246,0.8)] ring-4 ring-violet-500/20"
+
+            
+
+                                  title="Open Chatbot"
+
+            
+
+                                >
+
+            
+
+                                  <div className="absolute inset-0 bg-violet-500/10 animate-pulse rounded-full"></div>
+
+            
+
+                                  <img 
+
+            
+
+                                    src="/bot-icon.webp" 
+
+            
+
+                                    alt="Chatbot" 
+
+            
+
+                                    className="w-full h-full object-cover relative z-10"
+
+            
+
+                                  />
+
+            
+
+                                </button>
+
+            
+
+                              )}
+
+            
+
+                        
+
+            
+
+                  
+
+            
+
+                  {/* Chat Sidebar Drawer */}
+
+                  <div 
+
+                    className={`fixed top-0 right-0 h-full w-full sm:w-[400px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out z-40 border-l border-slate-200 ${
+
+                      showChat ? 'translate-x-0' : 'translate-x-full'
+
+                    }`}
+
+                  >
+
+                    <div className="flex flex-col h-full pt-16 sm:pt-0"> {/* Padding top on mobile to avoid nav collision if needed, but z-40 is high */}
+
+                       {/* Header for Chat Sidebar */}
+
+                       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 bg-slate-50/50 backdrop-blur-sm">
+
+                          <h3 className="font-bold text-slate-700 flex items-center gap-2">
+
+                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+
+                            Todo Assistant
+
+                          </h3>
+
+                          <button 
+
+                            onClick={() => setShowChat(false)}
+
+                            className="p-1 rounded-md hover:bg-slate-200 text-slate-500 transition-colors"
+
+                          >
+
+                            ✕
+
+                          </button>
+
+                       </div>
+
+                                              <div className="flex-1 overflow-hidden relative">
+
+                                                 <ChatInterface onUpdate={fetchTodos} />
+
+                                              </div>
+
+                                           </div>
+
+                       
+
+                  </div>
+
+                </div>
+
+              );
+
+            }

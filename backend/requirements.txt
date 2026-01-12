@@ -15,3 +15,6 @@ pydantic-core
 python-dotenv
 typing-extensions
 typing-inspect
+openai-agents
+mcp
+nest_asyncio

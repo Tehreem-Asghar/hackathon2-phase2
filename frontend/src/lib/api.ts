@@ -1,4 +1,4 @@
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://hackathon2-phase2-z7h4.vercel.app').replace(/\/$/, '');
+export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://hackathon2-phase2-z7h4.vercel.app').replace(/\/$/, '');
 
 type FetchOptions = RequestInit & {
   headers?: Record<string, string>;
@@ -17,7 +17,7 @@ export const api = {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       ...options,
       headers,
     });

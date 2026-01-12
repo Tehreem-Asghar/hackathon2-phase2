@@ -1,18 +1,14 @@
 <!--
 Sync Impact Report:
-Version change: (initial) → 1.0.0
-Modified principles: (initial constitution creation)
+Version change: 1.0.0 → 2.0.0
+Modified principles: (none)
 Added sections:
-  - Core Principles (7 principles)
-  - Technology Matrix
-  - Phase-Governed Development
-  - Project Standards
-  - Governance
+  - Phase III Technology Matrix (Detailed)
 Removed sections: (none)
 Templates requiring updates:
-  - plan-template.md: ✅ No changes needed (aligns with phase-governed approach)
-  - spec-template.md: ✅ No changes needed (technology-agnostic spec format)
-  - tasks-template.md: ✅ No changes needed (task categorization supports phase isolation)
+  - plan-template.md: ✅ No changes needed
+  - spec-template.md: ✅ No changes needed
+  - tasks-template.md: ✅ No changes needed
 Follow-up TODOs: (none)
 -->
 
@@ -21,13 +17,13 @@ Follow-up TODOs: (none)
 ## Core Principles
 
 ### I. Phase-Governed Development
-The project follows a strict phased development model where technology choices are bounded by the current phase. Phase I focuses on backend API only. Phase II introduces web frontend, authentication, and database. Phase III and later may include AI/agents/orchestration capabilities. Technologies from later phases MUST NOT be introduced prematurely.
+The project follows a strict phased development model where technology choices are bounded by the current phase. Phase I focuses on backend API only. Phase II introduces web frontend, authentication, and database. Phase III introduces AI agents and ChatKit. Technologies from later phases MUST NOT be introduced prematurely.
 
 ### II. Technology Isolation
 Each phase has a defined, immutable technology matrix. Once a phase technology stack is established, deviations require explicit ADR approval. The technology matrix is the single source of truth for what technologies are permitted at each phase.
 
 ### III. Incremental Validity
-Every phase deliverable must be independently functional and deliver value. Phase I produces a working REST API. Phase II produces a complete full-stack application. No phase dependencies that require incomplete work from later phases.
+Every phase deliverable must be independently functional and deliver value. Phase I produces a working REST API. Phase II produces a complete full-stack application. Phase III adds AI capabilities. No phase dependencies that require incomplete work from later phases.
 
 ### IV. API-First Design (Phase I Priority)
 Backend API must be designed and implemented before any frontend work begins in Phase II. The API should be fully documented and independently testable via tools like curl, Postman, or other HTTP clients.
@@ -69,13 +65,17 @@ All system components must emit structured logs. API endpoints must log request/
 **Allowed**: Web frontend development, authentication, Neon PostgreSQL, full-stack integration
 **Forbidden**: AI/agent frameworks, advanced cloud infrastructure, orchestration systems
 
-### Phase III and Later: Advanced Capabilities
-- **Advanced Cloud Infrastructure**: Scalable deployment, containerization, CI/CD pipelines
-- **Agents**: Autonomous agent systems for task automation
-- **AI**: Machine learning models, natural language processing
-- **Orchestration**: Workflow engines, task scheduling systems
+### Phase III: Todo AI Chatbot
+- **Backend**: Python FastAPI (continues from Phase II)
+- **Database**: Neon Serverless PostgreSQL (continues from Phase II)
+- **Frontend**: Next.js + OpenAI ChatKit
+- **AI Framework**: OpenAI Agents SDK
+- **MCP Server**: Official MCP SDK
+- **Architecture**: Stateless, database-backed conversation history
+- **Tools**: MCP Tools (`add_task`, `list_tasks`, `complete_task`, `delete_task`, `update_task`)
 
-**Note**: Phase III scope is intentionally deferred until Phase II is complete and validated.
+**Allowed**: AI agent implementation, MCP server integration, ChatKit UI, natural language task management
+**Forbidden**: Complex microservices, orchestration systems (unless required by Agents SDK)
 
 ## Project Standards
 
@@ -134,4 +134,4 @@ If a feature requires violating YAGNI or minimal complexity principles:
 4. Create an ADR capturing the tradeoff analysis
 5. Review must approve before implementation
 
-**Version**: 1.0.0 | **Ratified**: 2026-01-04 | **Last Amended**: 2026-01-04
+**Version**: 2.0.0 | **Ratified**: 2026-01-08 | **Last Amended**: 2026-01-08

@@ -3,11 +3,13 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import ValidationError
 
-from app.api.routes import auth, todos
+from app.api.routes import auth, todos, chat
 from app.core.config import settings
 from app.db.session import engine
 from app.models.user import User
 from app.models.todo import Todo
+from app.models.conversation import Conversation
+from app.models.message import Message
 
 from sqlalchemy import text
 
@@ -28,6 +30,7 @@ app.add_middleware(
 
 app.include_router(auth, prefix="/api/auth", tags=["auth"])
 app.include_router(todos, prefix="/api/todos", tags=["todos"])
+app.include_router(chat, prefix="/api/chat", tags=["chat"])
 
 @app.on_event("startup")
 async def on_startup():
@@ -35,6 +38,8 @@ async def on_startup():
         # Create tables if they don't exist
         await conn.run_sync(User.metadata.create_all)
         await conn.run_sync(Todo.metadata.create_all)
+        await conn.run_sync(Conversation.metadata.create_all)
+        await conn.run_sync(Message.metadata.create_all)
         
         # Manually add 'name' column if it's missing (since create_all doesn't handle migrations)
         try:
